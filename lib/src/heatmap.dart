@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import './widget/heatmap_page.dart';
-import './widget/heatmap_color_tip.dart';
+
 import './data/heatmap_color_mode.dart';
 import './util/date_util.dart';
+import './widget/heatmap_color_tip.dart';
+import './widget/heatmap_page.dart';
 
 class HeatMap extends StatefulWidget {
   /// The Date value of start day of heatmap.
@@ -77,6 +78,10 @@ class HeatMap extends StatefulWidget {
   /// default value is false.
   final bool scrollable;
 
+  /// An object that can be used to control the position to which this scroll
+  /// view is scrolled.
+  final ScrollController? scrollController;
+
   /// Widgets which shown at left and right side of colorTip.
   ///
   /// First value is the left side widget and second value is the right side widget.
@@ -113,6 +118,7 @@ class HeatMap extends StatefulWidget {
     this.showText = false,
     this.showColorTip = true,
     this.scrollable = false,
+    this.scrollController,
     this.colorTipHelper,
     this.colorTipCount,
     this.colorTipSize,
@@ -129,6 +135,7 @@ class _HeatMap extends State<HeatMap> {
     return widget.scrollable
         ? SingleChildScrollView(
             reverse: true,
+            controller: widget.scrollController,
             scrollDirection: Axis.horizontal,
             child: child,
           )
@@ -143,8 +150,7 @@ class _HeatMap extends State<HeatMap> {
         // Heatmap Widget.
         _scrollableHeatMap(HeatMapPage(
           endDate: widget.endDate ?? DateTime.now(),
-          startDate: widget.startDate ??
-              DateUtil.oneYearBefore(widget.endDate ?? DateTime.now()),
+          startDate: widget.startDate ?? DateUtil.oneYearBefore(widget.endDate ?? DateTime.now()),
           colorMode: widget.colorMode,
           size: widget.size,
           fontSize: widget.fontSize,
